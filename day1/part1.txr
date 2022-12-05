@@ -1,0 +1,9 @@
+@(collect :vars (inventories))
+@ (collect :vars (calories))
+@calories
+@ (last)
+
+@ (end)
+@ (bind inventories @(sum [mapcar toint calories]))
+@(end)
+@(do (put-line `@(sum (take 3 [sort inventories >]))`))

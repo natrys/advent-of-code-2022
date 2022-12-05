@@ -1,0 +1,23 @@
+@(do (defun score (p1 p2)
+       (match-case (list p1 p2)
+         (("A" "X") (cons (+ 1 3) (+ 3 0)))
+         (("A" "Y") (cons (+ 2 6) (+ 1 3)))
+         (("A" "Z") (cons (+ 3 0) (+ 2 6)))
+         (("B" "X") (cons (+ 1 0) (+ 1 0)))
+         (("B" "Y") (cons (+ 2 3) (+ 2 3)))
+         (("B" "Z") (cons (+ 3 6) (+ 3 6)))
+         (("C" "X") (cons (+ 1 6) (+ 2 0)))
+         (("C" "Y") (cons (+ 2 0) (+ 3 3)))
+         (("C" "Z") (cons (+ 3 3) (+ 1 6))))))
+@(bind (score1 score2) (0 0))
+@(repeat)
+@player1 @player2
+@(bind (part1 . part2) @(score player1 player2))
+@(do (progn
+       (inc score1 part1)
+       (inc score2 part2)))
+@(end)
+@(output)
+Part 1: @score1
+Part 2: @score2
+@(end)

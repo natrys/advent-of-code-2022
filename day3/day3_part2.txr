@@ -1,0 +1,21 @@
+#!/usr/bin/txr
+@(do (defun priority (char)
+       (if (chr-islower char)
+         (+ 1 (- (int-chr char) (int-chr #\a)))
+         (+ 26 (priority (chr-tolower char))))))
+@(bind score 0)
+@(repeat)
+@rucksack1
+@rucksack2
+@rucksack3
+@(bind common @(flow (list rucksack1 rucksack2 rucksack3)
+                 (mapcar 'hash-list)
+                 (reduce-left 'hash-isec)
+                 (hash-values)
+                 (car)))
+@(do (inc score (priority common)))
+@(end)
+@(output)
+Part2: @score
+@(end)
+
