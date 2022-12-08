@@ -1,0 +1,38 @@
+@(block)
+@(trailer)
+@ (collect)
+@\ @(coll)@{columns /\d+/} @(end)
+@ (end)
+@(end)
+@(bind stacks @(repeat '(nil) (length (car columns))))
+@(repeat)
+@ (coll)@{crates /(\s\s\s|\[.\])/}@(maybe)@\ @(end)@(end)
+@ (do 
+   (dotimes (c (length crates))
+     (when-match `[@crate]` [crates c]
+       (push crate [stacks c]))))
+@(last)
+ 1@(skip)
+@(end)
+@(do (set stacks (mapcar 'reverse stacks)))
+@(bind stacks1 @(copy-list stacks))
+@(bind stacks2 @(copy-list stacks))
+@(repeat)
+move @n from @source to @destination
+@ (do
+    (let ((src_idx (- (toint source) 1))
+          (dest_idx (- (toint destination) 1))
+          (n (toint n)))
+
+      ;; part 1
+      (dotimes (_ n) 
+        (push (pop [stacks1 src_idx]) [stacks1 dest_idx]))
+
+      ;; part 2
+      (set [stacks2 dest_idx] (append [[stacks2 src_idx] 0..n] [stacks2 dest_idx]))
+      (set [stacks2 src_idx] [[stacks2 src_idx] n..:])))
+@(end)
+@(output)
+Part1: @(cat-str [mapcar car stacks1])
+Part2: @(cat-str [mapcar car stacks2])
+@(end)
