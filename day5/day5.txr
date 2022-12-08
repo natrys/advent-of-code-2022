@@ -14,23 +14,23 @@
 @(last)
  1@(skip)
 @(end)
-@(do (set stacks (mapcar 'reverse stacks)))
+@(do (set stacks [mapcar reverse stacks]))
 @(bind stacks1 @(copy-list stacks))
 @(bind stacks2 @(copy-list stacks))
 @(repeat)
 move @n from @source to @destination
 @ (do
     (let ((src_idx (- (toint source) 1))
-          (dest_idx (- (toint destination) 1))
+          (dst_idx (- (toint destination) 1))
           (n (toint n)))
 
       ;; part 1
       (dotimes (_ n) 
-        (push (pop [stacks1 src_idx]) [stacks1 dest_idx]))
+        (push (pop [stacks1 src_idx]) [stacks1 dst_idx]))
 
       ;; part 2
-      (set [stacks2 dest_idx] (append [[stacks2 src_idx] 0..n] [stacks2 dest_idx]))
-      (set [stacks2 src_idx] [[stacks2 src_idx] n..:])))
+      (upd [stacks2 dst_idx] (op append [[stacks2 src_idx] 0..n] @1))
+      (upd [stacks2 src_idx] (op call @1 n..:))))
 @(end)
 @(output)
 Part1: @(cat-str [mapcar car stacks1])
