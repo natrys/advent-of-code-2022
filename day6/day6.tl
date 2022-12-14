@@ -1,0 +1,13 @@
+(defun solve (input window)
+  (flet ((char-at (idx) (- [input idx] #\a)))
+    (let ((state (vector 26 0)))
+      (each ((i (range* 0 window))) (inc [state (char-at i)]))
+      (each ((i (range* window (length input))))
+        (inc [state (char-at i)])
+        (when (all (range* (- i window) i) (op = 1 (call state (char-at @1))))
+          (return (+ i 1)))
+        (dec [state (char-at (- i window))])))))
+
+(let ((input (get-line)))
+  (put-line `Part1: @(solve input (- 4 1))`)
+  (put-line `Part2: @(solve input (- 14 1))`))
