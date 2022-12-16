@@ -1,0 +1,34 @@
+@(define parse-fs (root sizes))
+$ cd @root
+@ (local dir filesize)
+@ (bind sizes @(list 0))
+@ (maybe)
+$ ls
+@  (collect :gap 0 :lists (dir filesize))
+@   (cases)
+dir @dir
+@   (or)
+@{filesize /\d+/} @/.*/
+@   (end)
+@  (end)
+@  (do (set sizes (list (sum (mapcar 'toint filesize)))))
+@  (if (> (length dir) 0))
+@   (collect :times (length dir) :lists (child-sizes))
+@    (parse-fs @(pop dir) child-sizes)
+@   (end)
+@   (do (set sizes ^(,(+ (car sizes) (sum (mapcar 'car child-sizes))) ,*child-sizes)))
+@  (end)
+@ (end)
+@ (maybe)
+$ cd ..
+@ (end)
+@(end)
+@(parse-fs "/" sizes)
+@(do 
+   (progn
+     ;; part1
+     (put-line `Part1: @(sum (keep-if (op < @1 100000) (flatten sizes)))`)
+
+     ;; part2
+     (let ((target (- (car sizes) 40000000)))
+       (put-line `Part2: @(find-min (keep-if (op > @1 target) (flatten sizes)))`))))
