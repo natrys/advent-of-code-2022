@@ -6,18 +6,12 @@ end
 # Doesn't work for some reason, so actually need to use Tuple later in a Set
 # Base.hash(p::Point, h::UInt64) = hash((p.x, p.y), h)
 
-function move_tail(head::Point, tail::Point)
-  if head.x != tail.x
-    tail.x += head.x > tail.x ? 1 : -1
-  end
-  if head.y != tail.y
-    tail.y += head.y > tail.y ? 1 : -1
-  end
+@inline function move_tail(head::Point, tail::Point)
+  tail.x += sign(head.x - tail.x)
+  tail.y += sign(head.y - tail.y)
 end
 
 function main(input, N)
-  pattern = r"(?P<dir>[RLUD]) (?P<step>\d+)"
-
   directions = Dict(
     "R" => point -> point.x += 1,
     "L" => point -> point.x -= 1,
@@ -25,14 +19,12 @@ function main(input, N)
     "D" => point -> point.y -= 1,
   )
 
-  tails = Vector{Point}(undef, N+1)
-  for i in 1:N+1
-    tails[i] = Point(0, 0)
-  end
+  tails = [Point(0, 0) for _ in 1:N+1]
 
   visited = Set{Tuple{Int, Int}}()
   push!(visited, (0, 0))
 
+  pattern = r"(?P<dir>[RLUD]) (?P<step>\d+)"
   for line in input
     m = match(pattern, line)
     dir, step = m["dir"], parse(Int, m["step"])
