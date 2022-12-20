@@ -18,7 +18,7 @@
         ;; part 2
         (let* ((pos (- cycle 1))
                (rowpos (mod pos 40)))
-          (when (and (>= rowpos (- X 1)) (<= rowpos (+ X 1)))
+          (when (<= (abs (- X rowpos)) 1)
             (set [pixels pos] #\#)))
 
         (inc cycle 1))
