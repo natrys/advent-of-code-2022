@@ -1,0 +1,36 @@
+@(bind op-cycles @(hash-from-alist '(("addx" . 2) ("noop" . 1))))
+@(bind checkpoints @(hash-list '(20 60 100 140 180 220)))
+@(bind (X cycle total) (1 1 0))
+@(bind pixels @(vector 240 #\.))
+@(repeat)
+@ (cases)
+@opcode @{val /\-?\d+/}
+@ (or)
+@opcode
+@ (end)
+@ (do
+    (progn
+      (each ((i (range 1 [op-cycles opcode])))
+        ;; part 1
+        (when [checkpoints cycle]
+          (inc total (* cycle X)))
+
+        ;; part 2
+        (let* ((pos (- cycle 1))
+               (rowpos (mod pos 40)))
+          (when (and (>= rowpos (- X 1)) (<= rowpos (+ X 1)))
+            (set [pixels pos] #\#)))
+
+        (inc cycle 1))
+
+      (when (str= opcode "addx")
+        (inc X (toint val)))))
+@(end)
+@(do (put-line `Part1: @total`))
+@(do 
+   (progn
+     (put-line `Part2:`)
+     (each ((i (range* 0 6)))
+       (let* ((begin (* i 40))
+              (end (+ begin 40)))
+         (put-line (cat-str [pixels (range* begin end)]))))))
